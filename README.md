@@ -1,53 +1,77 @@
-# Primer Proyecto - API REST con Spring Boot
+# Arquitectura de Microservicios con Spring Boot
 
 ## 📋 Descripción
 
-Este es un proyecto educativo que implementa una **API REST profesional** con Spring Boot.
-El objetivo es aprender conceptos fundamentales de backend:
-- Arquitectura de capas
-- Patrón REST
-- Mapeo Objeto-Relacional (ORM)
-- Inyección de dependencias
+Este proyecto implementa una **arquitectura de microservicios** completa utilizando Spring Boot.
+Consiste en dos servicios independientes que demuestran los principios de microservicios:
 
-## 🎯 ¿Qué aprenderemos?
+- 🔹 **Users Service** - Gestión de usuarios (Puerto 8081)
+- 🔹 **Tasks Service** - Gestión de tareas (Puerto 8082)
 
-- ✅ **Crear endpoints REST** (GET, POST, PUT, DELETE)
-- ✅ **Separación de responsabilidades** (Controller → Service → Repository)
-- ✅ **Usar DTOs** para transferencia segura de datos
-- ✅ **Trabajar con una Base de Datos** (JPA/Hibernate)
-- ✅ **Manejar errores** de forma profesional
+Cada microservicio tiene su propia base de datos SQLite y puede desplegarse de forma independiente.
 
 ---
 
-## 🛠️ Requisitos Previos
+## 📁 Estructura del Proyecto
 
-- **Java 25 (OpenJDK)** instalado
-- **Git** (opcional)
-- Un IDE como **IntelliJ IDEA** o **VS Code**
-
----
-
-## 📦 Tecnologías Utilizadas
-
-| Tecnología | Versión | Propósito |
-|-----------|---------|----------|
-| **Spring Boot** | 3.x | Framework web |
-| **Spring Data JPA** | - | Acceso a base de datos |
-| **Hibernate** | - | ORM (mapeo Java ↔ SQL) |
-| **SQLite** | - | Base de datos embebida |
-| **Lombok** | - | Genera getters/setters automáticamente |
-
----
-
-## 🚀 Cómo Ejecutar
-
-### 1️⃣ Clonar o descargar el proyecto
-```bash
-git clone [url-del-repo]
-cd primer-proyecto
+```
+microservices/
+├── users-service/          # Microservicio de usuarios
+└── tasks-service/          # Microservicio de tareas
 ```
 
-### 2️⃣ Compilar el proyecto
+---
+
+## 📖 Documentación Completa
+
+👉 **[Ver documentación detallada de los microservicios](microservices/README.md)**
+
+La documentación completa incluye:
+- Endpoints de cada servicio
+- Ejemplos de peticiones
+- Instrucciones de ejecución
+- Arquitectura y patrones utilizados
+- Tecnologías implementadas
+
+---
+
+## 🚀 Inicio Rápido
+
+### Users Service (Puerto 8081)
+```bash
+cd microservices/users-service
+gradlew.bat bootRun
+```
+
+### Tasks Service (Puerto 8082)
+```bash
+cd microservices/tasks-service
+gradlew.bat bootRun
+```
+
+---
+
+## 🛠️ Tecnologías
+
+- **Spring Boot 4.0.3** - Framework de microservicios
+- **Spring Data JPA** - Persistencia de datos
+- **SQLite** - Base de datos embebida
+- **Lombok** - Reducción de código boilerplate
+- **Gradle** - Gestión de dependencias
+
+---
+
+## 🏗️ Ventajas de esta Arquitectura
+
+✅ Servicios independientes y desplegables por separado  
+✅ Cada servicio con su propia base de datos  
+✅ Escalabilidad horizontal  
+✅ Aislamiento de fallos  
+✅ Desarrollo paralelo en equipos diferentes
+
+---
+
+**📚 Para más detalles, consulta [microservices/README.md](microservices/README.md)**
 ```bash
 ./gradlew build
 ```
