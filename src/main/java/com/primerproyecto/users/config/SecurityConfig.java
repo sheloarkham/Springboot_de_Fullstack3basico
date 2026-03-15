@@ -1,4 +1,4 @@
-package com.primerproyecto.api.config;
+package com.primerproyecto.users.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

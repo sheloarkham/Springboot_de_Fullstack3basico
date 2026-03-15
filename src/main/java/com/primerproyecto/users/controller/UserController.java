@@ -1,7 +1,7 @@
-package com.primerproyecto.api.controller;
+package com.primerproyecto.users.controller;
 
-import com.primerproyecto.api.dto.UserDTO;
-import com.primerproyecto.api.service.UserService;
+import com.primerproyecto.users.dto.UserDTO;
+import com.primerproyecto.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

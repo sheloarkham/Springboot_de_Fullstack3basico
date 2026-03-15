@@ -1,4 +1,4 @@
-package com.primerproyecto.api.dto;
+package com.primerproyecto.users.dto;
 
 import lombok.Data;
 
@@ -19,7 +19,7 @@ import lombok.Data;
  * <p><b>Nota sobre {@code @Data}:</b> La anotación Lombok genera automáticamente
  * getters, setters, equals(), hashCode() y toString().</p>
  * 
- * @see com.primerproyecto.api.model.User la entidad persistida en BD
+ * @see com.primerproyecto.users.model.User la entidad persistida en BD
  * @since 1.0
  */
 @Data

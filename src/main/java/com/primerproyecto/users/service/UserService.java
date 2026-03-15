@@ -1,8 +1,8 @@
-package com.primerproyecto.api.service;
+package com.primerproyecto.users.service;
 
-import com.primerproyecto.api.dto.UserDTO;
-import com.primerproyecto.api.model.User;
-import com.primerproyecto.api.repository.UserRepository;
+import com.primerproyecto.users.dto.UserDTO;
+import com.primerproyecto.users.model.User;
+import com.primerproyecto.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

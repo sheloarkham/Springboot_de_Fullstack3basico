@@ -1,6 +1,6 @@
-package com.primerproyecto.api.repository;
+package com.primerproyecto.users.repository;
 
-import com.primerproyecto.api.model.User;
+import com.primerproyecto.users.model.User;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
