@@ -1,0 +1,74 @@
+### USERS SERVICE - Puerto 8081 ###
+
+### Listar todos los usuarios
+GET http://localhost:8081/api/v1/users
+
+### Crear usuario
+POST http://localhost:8081/api/v1/users
+Content-Type: application/json
+
+{
+  "username": "maria_lopez",
+  "email": "maria@example.com"
+}
+
+### Obtener usuario por ID
+GET http://localhost:8081/api/v1/users/1
+
+### Actualizar usuario
+PUT http://localhost:8081/api/v1/users/1
+Content-Type: application/json
+
+{
+  "username": "juan_perez_actualizado",
+  "email": "juan.nuevo@example.com"
+}
+
+### Eliminar usuario
+DELETE http://localhost:8081/api/v1/users/1
+
+###############################################
+
+### TASKS SERVICE - Puerto 8082 ###
+
+### Listar todas las tareas
+GET http://localhost:8082/api/v1/tasks
+
+### Crear tarea
+POST http://localhost:8082/api/v1/tasks
+Content-Type: application/json
+
+{
+  "title": "Estudiar Spring Boot",
+  "description": "Completar tutorial de microservicios",
+  "completed": false,
+  "dueDate": "2026-03-25",
+  "userId": 1
+}
+
+### Obtener tarea por ID
+GET http://localhost:8082/api/v1/tasks/1
+
+### Obtener tareas de un usuario
+GET http://localhost:8082/api/v1/tasks/user/1
+
+### Buscar tareas por título
+GET http://localhost:8082/api/v1/tasks/search?title=proyecto
+
+### Actualizar tarea completa
+PUT http://localhost:8082/api/v1/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Proyecto actualizado",
+  "description": "Nueva descripción",
+  "completed": false,
+  "dueDate": "2026-03-30",
+  "userId": 1
+}
+
+### Cambiar estado completado (toggle)
+PATCH http://localhost:8082/api/v1/tasks/1/toggle
+
+### Eliminar tarea
+DELETE http://localhost:8082/api/v1/tasks/1
