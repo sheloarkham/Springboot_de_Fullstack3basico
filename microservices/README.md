@@ -6,7 +6,9 @@ Este proyecto implementa una arquitectura de microservicios utilizando Spring Bo
 
 ```
 microservices/
-├── users-service/          # Microservicio de gestión de usuarios
+├── users-service/          # Microservicio de gestión de usuarios (Puerto 8081)
+├── tasks-service/          # Microservicio de gestión de tareas (Puerto 8082)
+└── categories-service/     # Microservicio de categorías (Puerto 8083)
 │   ├── src/
 │   │   └── main/
 │   │       ├── java/
@@ -24,23 +26,6 @@ microservices/
 │   ├── build.gradle
 │   └── settings.gradle
 │
-└── tasks-service/          # Microservicio de gestión de tareas
-    ├── src/
-    │   └── main/
-    │       ├── java/
-    │       │   └── com/tasksservice/
-    │       │       ├── TasksServiceApplication.java
-    │       │       └── tasks/
-    │       │           ├── controller/    # REST Controllers
-    │       │           ├── service/       # Lógica de negocio
-    │       │           ├── repository/    # Acceso a datos
-    │       │           ├── model/         # Entidades JPA
-    │       │           ├── dto/           # Data Transfer Objects
-    │       │           └── config/        # Configuración Spring
-    │       └── resources/
-    │           └── application.properties
-    ├── build.gradle
-    └── settings.gradle
 ```
 
 ## 🚀 Microservicios
@@ -111,6 +96,39 @@ curl http://localhost:8082/api/v1/tasks/user/1
 curl -X PATCH http://localhost:8082/api/v1/tasks/1/toggle
 ```
 
+### 3. Categories Service (Puerto 8083)
+
+Gestiona categorías para organizar tareas.
+
+**Base de datos:** `categories.db`
+
+**Endpoints disponibles:**
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/v1/categories` | Listar todas las categorías |
+| POST | `/api/v1/categories` | Crear una nueva categoría |
+| GET | `/api/v1/categories/{id}` | Obtener categoría por ID |
+| GET | `/api/v1/categories/user/{userId}` | Obtener categorías de un usuario |
+| GET | `/api/v1/categories/search?name=` | Buscar categorías por nombre |
+| PUT | `/api/v1/categories/{id}` | Actualizar categoría |
+| DELETE | `/api/v1/categories/{id}` | Eliminar categoría |
+
+**Ejemplo de petición:**
+```bash
+# Crear categoría
+curl -X POST http://localhost:8083/api/v1/categories \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name":"Trabajo",
+    "color":"#FF5733",
+    "userId":1
+  }'
+
+# Listar categorías de un usuario
+curl http://localhost:8083/api/v1/categories/user/1
+```
+
 ## 💻 Cómo ejecutar los microservicios
 
 ### Requisitos previos
@@ -136,9 +154,17 @@ cd microservices/tasks-service
 gradlew.bat bootRun
 ```
 
+**Categories Service:**
+```bash
+cd microservices/categories-service
+./gradlew bootRun
+# o en Windows
+gradlew.bat bootRun
+```
+
 ### Opción 2: Construcción de JARs
 
-**Construir ambos servicios:**
+**Construir todos los servicios:**
 ```bash
 # Users Service
 cd microservices/users-service
@@ -146,6 +172,10 @@ cd microservices/users-service
 
 # Tasks Service
 cd microservices/tasks-service
+./gradlew build
+
+# Categories Service
+cd microservices/categories-service
 ./gradlew build
 ```
 
@@ -156,6 +186,9 @@ java -jar microservices/users-service/build/libs/users-service-1.0.0.jar
 
 # Tasks Service
 java -jar microservices/tasks-service/build/libs/tasks-service-1.0.0.jar
+
+# Categories Service
+java -jar microservices/categories-service/build/libs/categories-service-1.0.0.jar
 ```
 
 ## 🔧 Tecnologías utilizadas
@@ -175,6 +208,7 @@ Cada microservicio tiene su propia base de datos SQLite independiente:
 
 - **users-service**: `users.db` - Almacena datos de usuarios
 - **tasks-service**: `tasks.db` - Almacena datos de tareas
+- **categories-service**: `categories.db` - Almacena datos de categorías
 
 Las bases de datos se crean automáticamente al iniciar cada servicio.
 
@@ -194,6 +228,7 @@ Una vez ejecutando los servicios, puedes acceder a la documentación interactiva
 
 - **Users Service:** http://localhost:8081/swagger-ui.html
 - **Tasks Service:** http://localhost:8082/swagger-ui.html
+- **Categories Service:** http://localhost:8083/swagger-ui.html
 
 ## 🧪 Testing
 
@@ -206,6 +241,10 @@ cd microservices/users-service
 
 # Tasks Service
 cd microservices/tasks-service
+./gradlew test
+
+# Categories Service
+cd microservices/categories-service
 ./gradlew test
 ```
 
