@@ -1,0 +1,12 @@
+# Archivos y directorios a ignorar al construir la imagen Docker
+.git
+.gitignore
+.github
+.gradle
+build/
+bin/
+*.db
+README.md
+.vscode
+.idea
+*.log

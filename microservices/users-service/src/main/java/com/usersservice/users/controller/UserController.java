@@ -46,6 +46,15 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDTO> partialUpdate(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        UserDTO updated = userService.actualizarParcial(id, userDTO);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (userService.eliminar(id)) {
