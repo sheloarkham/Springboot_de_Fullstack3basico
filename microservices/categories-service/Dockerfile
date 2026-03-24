@@ -5,9 +5,9 @@
 # Alpine Linux. Alpine es una distro minimalista (~5 MB base), perfecta para
 # contenedores ligeros.
 # Necesitamos el JDK completo aquí porque el Gradle wrapper lo requiere para
-# compilar y empaquetar el proyecto.
+# compilar Kotlin y empaquetar el proyecto.
 # =============================================================================
-FROM eclipse-temurin:25-jdk-alpine AS builder
+FROM eclipse-temurin:23-jdk-alpine AS builder
 
 # Directorio de trabajo para el proceso de compilación
 WORKDIR /workspace
@@ -15,8 +15,8 @@ WORKDIR /workspace
 # ── Truco de caché en capas ──────────────────────────────────────────────────
 # Copiamos primero SOLO los descriptores de Gradle (build.gradle, settings.gradle
 # y el wrapper). Docker cachea cada capa; si estos archivos no cambian entre
-# builds, la capa de descarga de dependencias se reutiliza y el build es mucho
-# más rápido.
+# builds, la capa de descarga de dependencias (incluyendo Kotlin) se reutiliza
+# y el build es mucho más rápido.
 COPY gradlew .
 COPY gradle/ gradle/
 COPY build.gradle .
@@ -26,17 +26,18 @@ COPY settings.gradle .
 RUN chmod +x gradlew
 
 # Descargamos todas las dependencias Maven/Gradle sin compilar todavía.
+# Esto incluye el compilador de Kotlin y todas las librerías.
 # --no-daemon  → no levanta el proceso daemon (más seguro y liviano en CI/Docker)
 # Si el build.gradle no cambia, Docker reutiliza esta capa en la próxima vez.
 RUN ./gradlew dependencies --no-daemon
 
 # ── Código fuente ────────────────────────────────────────────────────────────
-# Recién aquí copiamos el código. Así, si solo cambia src/, Docker solo
+# Recién aquí copiamos el código Kotlin. Así, si solo cambia src/, Docker solo
 # rehace las capas a partir de este punto (no vuelve a bajar dependencias).
-COPY src/ src/ 
+COPY src/ src/
 
 # Construimos el "fat JAR" (uber-jar): un único archivo .jar que incluye la app
-# y todas sus dependencias, listo para ejecutarse sin nada más.
+# compilada desde Kotlin a bytecode JVM y todas sus dependencias.
 # -x test → omitimos los tests para acelerar el build de la imagen
 RUN ./gradlew bootJar --no-daemon -x test
 
@@ -45,16 +46,19 @@ RUN ./gradlew bootJar --no-daemon -x test
 # STAGE 2: RUNTIME
 # =============================================================================
 # En esta etapa SOLO copiamos el JAR generado arriba. No copiamos ni el JDK
-# de build, ni el código fuente, ni Gradle → la imagen final es mucho más
-# pequeña que si todo estuviera en una sola etapa.
+# de build, ni el código fuente Kotlin, ni Gradle → la imagen final es mucho
+# más pequeña que si todo estuviera en una sola etapa.
+# Nota: Kotlin se compila a bytecode JVM, así que en runtime solo necesitamos
+# la JVM, no el compilador de Kotlin.
 # =============================================================================
-FROM eclipse-temurin:25-jdk-alpine AS runtime
+FROM eclipse-temurin:23-jdk-alpine AS runtime
 
 # Metadatos de la imagen (buena práctica)
 LABEL maintainer="primer-proyecto"
-LABEL description="API REST Spring Boot 4 — Users Microservice"
-LABEL java.version="25"
-LABEL service="users-service"
+LABEL description="API REST Spring Boot 4 — Categories Microservice (Kotlin)"
+LABEL java.version="23"
+LABEL kotlin.version="2.1.0"
+LABEL service="categories-service"
 
 # Directorio de trabajo donde correrá la aplicación dentro del contenedor
 WORKDIR /app
@@ -70,14 +74,14 @@ COPY --from=builder /workspace/build/libs/*.jar app.jar
 
 # Declaramos el puerto interno en el que escucha Spring Boot.
 # Nota: EXPOSE es informativo — el mapeo real se hace en docker-compose o con -p.
-# Users Service corre en el puerto 8081
-EXPOSE 8081
+# Categories Service corre en el puerto 8082
+EXPOSE 8082
 
 # ── Variables de entorno ─────────────────────────────────────────────────────
 
 # URL JDBC de SQLite apuntando al directorio con volumen para persistencia.
 # Puede ser sobreescrita desde docker-compose o con -e al hacer `docker run`.
-ENV SPRING_DATASOURCE_URL=jdbc:sqlite:/app/data/users.db
+ENV SPRING_DATASOURCE_URL=jdbc:sqlite:/app/data/categories.db
 
 # Opciones de JVM optimizadas para correr dentro de un contenedor:
 #   -XX:+UseContainerSupport    → la JVM respeta los límites de CPU/RAM del contenedor
